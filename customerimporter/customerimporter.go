@@ -1,4 +1,4 @@
-// package customerimporter reads from the given customers.csv file and returns a
+// Package customerimporter reads from the given customers.csv file and returns a
 // sorted (data structure of your choice) of email domains along with the number
 // of customers with e-mail addresses for each domain.  Any errors should be
 // logged (or handled). Performance matters (this is only ~3k lines, but *could*
@@ -13,11 +13,13 @@ import (
 	"strings"
 )
 
+// DomainEntry ...
 type DomainEntry struct {
 	Count  int
 	Domain string
 }
 
+// ProcessCustomerData ...
 func ProcessCustomerData(filename string) ([]DomainEntry, error) {
 	csvData, err := readCSVFile(filename)
 	if err != nil {
@@ -43,6 +45,7 @@ func readCSVFile(filename string) ([][]string, error) {
 	return reader.ReadAll()
 }
 
+// CountEmailDomains ...
 func CountEmailDomains(records [][]string) (map[string]int, error) {
 	if records == nil {
 		return nil, errors.New("empty CSV data")

@@ -13,17 +13,14 @@ func main() {
 
 	if filename == "" {
 		log.Fatal("no input file provided")
-		os.Exit(1)
 	}
 
 	customerEntries, err := customerimporter.ProcessCustomerData(filename)
 	if err != nil {
-		log.Fatal(err)
-		os.Exit(1)
+		log.Fatalf("Error processing customer data: %v", err)
 	}
 
 	displayCustomerEntries(customerEntries)
-	os.Exit(0)
 }
 
 func displayCustomerEntries(entries []customerimporter.DomainEntry) {

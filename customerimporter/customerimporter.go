@@ -8,6 +8,7 @@ package customerimporter
 import (
 	"encoding/csv"
 	"errors"
+	"fmt"
 	"os"
 	"sort"
 	"strings"
@@ -23,12 +24,12 @@ type DomainEntry struct {
 func ProcessCustomerData(filename string) ([]DomainEntry, error) {
 	csvData, err := readCSVFile(filename)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error reading CSV data: %v", err)
 	}
 
 	emailCounts, err := CountEmailDomains(csvData)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to count email domains: %v", err)
 	}
 
 	return sortDomainEntries(emailCounts), nil
@@ -37,7 +38,7 @@ func ProcessCustomerData(filename string) ([]DomainEntry, error) {
 func readCSVFile(filename string) ([][]string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error opening CSV file: %v", err)
 	}
 	defer file.Close()
 
@@ -54,6 +55,9 @@ func CountEmailDomains(records [][]string) (map[string]int, error) {
 	domainCounts := make(map[string]int)
 
 	for _, record := range records {
+		if len(record) < 3 {
+            return nil, fmt.Errorf("malformed record: %v", record)
+        }
 		domain := extractDomain(record[2])
 		domainCounts[domain]++
 	}

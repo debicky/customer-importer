@@ -13,6 +13,7 @@ To run the program, use the following command:
 ```
 FILENAME=data/customers.csv make run          
 ```
+you can always provide your own dataset.
 
 ### Output
 The program outputs a sorted list of email domains and the count of customers associated with each domain.

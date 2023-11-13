@@ -1,6 +1,7 @@
 package customerimporter
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -67,4 +68,36 @@ func TestExtractDomain(t *testing.T) {
 	if result != expected {
 		t.Errorf("extractDomain() = %v, want %v", result, expected)
 	}
+}
+
+func generateTestData(numRecords int) [][]string {
+    records := make([][]string, numRecords)
+    for i := 0; i < numRecords; i++ {
+        records[i] = []string{"Name", "LastName", "email" + fmt.Sprint(i) + "@example.com"}
+    }
+    return records
+}
+
+// Benchmark for 1000 records
+func BenchmarkCountEmailDomains1000(b *testing.B) {
+    records := generateTestData(1000)
+    benchmarkCountEmailDomains(records, b)
+}
+
+// Benchmark for 3000 records
+func BenchmarkCountEmailDomains3000(b *testing.B) {
+    records := generateTestData(3000)
+    benchmarkCountEmailDomains(records, b)
+}
+
+// Benchmark for 10000 records
+func BenchmarkCountEmailDomains10000(b *testing.B) {
+    records := generateTestData(10000)
+    benchmarkCountEmailDomains(records, b)
+}
+
+func benchmarkCountEmailDomains(records [][]string, b *testing.B) {
+    for i := 0; i < b.N; i++ {
+        _, _ = CountEmailDomains(records)
+    }
 }
